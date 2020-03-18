@@ -1,1 +1,1 @@
-An end-to-end solution for audio streaming solutions to minimise piracy
+An end-to-end solution for audio streaming services to minimise piracy
