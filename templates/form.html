@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style type="text/css">
+            body {
+                background-color: #0e153a;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container-fluid">
+        <form method="POST" action="/form-handler" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3 style="color: #e2f3f5">UPLOAD</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="file" class="form-control" name="audioUpload" placeholder="Username" aria-hidden="true">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3 style="color: #e2f3f5">KEY</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="EDK" placeholder="Enter operation key" aria-describedby="basic-addon1">  
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="btn btn-default" type="submit" style="background-color:#fc5185; color:white">Encrypt/Decrypt</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
