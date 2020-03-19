@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
-import os, random, copy
+import os, random, copy, socket
 import pyaudio, wave, sys
 import librosa
+import soundfile as sf
+from soundfile import SoundFile
 
 app = Flask(__name__,
             static_folder='static',
@@ -22,7 +24,7 @@ def genInd(key, limit):
             break
     
         ind += temp
-        c += 269
+        c += 500
     
     ind.sort()
     return ind
@@ -55,35 +57,15 @@ def home():
 def form():
     return render_template('form.html')
 
-@app.route('/play')
-def play():
-    CHUNK = 1024
-    wf = wave.open('static/uploads/Violin.wav', 'rb')
-    p = pyaudio.PyAudio()
-    stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                    channels=wf.getnchannels(),
-                    rate=wf.getframerate(),
-                    output=True)
-
-    data = wf.readframes(CHUNK)
-    while data != '':
-        stream.write(data)
-        data = wf.readframes(CHUNK)
-
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
-    return 'Playing!'
-
-@app.route('/form-handler', methods=['POST'])
-def handle_data():
+@app.route('/form_handler', methods=['POST'])
+def form_handler():
     if request.method == "POST":
         if request.files:
             audioUpload = request.files["audioUpload"]
             path = os.path.join('static/uploads/', audioUpload.filename)
             audioUpload.save(path)
             
-            x,sr = librosa.load(path)
+            x,sr = librosa.load(path, sr=44100)
             y = copy.deepcopy(x)
             limit = len(x)
 
@@ -93,8 +75,48 @@ def handle_data():
             
             outPath = os.path.join('static/audio/', 'test.wav')
             librosa.output.write_wav(outPath, y, sr)
+            sf.write(outPath, y, sr, subtype='PCM_16')
 
     return redirect(url_for('home'))
+
+@app.route('/demoLib')
+def demoLib():
+    return render_template('library.html')
+
+@app.route('/player')
+def player():
+    y,sr = librosa.load('static/audio/test.wav', sr=44100)
+    z = copy.deepcopy(y)
+    limit = len(y)
+
+    key = convKey('elephant')
+    ind = genInd(key, limit)
+    z = encDec(z, ind)
+    tb = z.tobytes()
+
+    with open('static/temp/temp.txt', 'wb') as f:
+        f.write(tb)
+
+    CHUNK = 1024
+    wf = open('static/temp/temp.txt', 'rb')
+    p = pyaudio.PyAudio()
+    stream = p.open(format= 1,
+                channels=1,
+                rate=44100,
+                output=True)
+
+    data = wf.read(CHUNK)
+    while data != b'':
+        stream.write(data)
+        data = wf.read(CHUNK)
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+    wf.close()
+    print('Done')
+    os.remove("static/temp/temp.txt")
+    return redirect(url_for('demoLib'))
 
 if __name__ == '__main__':
     app.run(debug=True)
