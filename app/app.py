@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os, random, copy
+import pyaudio, wave, sys
 import librosa
 
 app = Flask(__name__,
@@ -53,6 +54,26 @@ def home():
 @app.route('/form')
 def form():
     return render_template('form.html')
+
+@app.route('/play')
+def play():
+    CHUNK = 1024
+    wf = wave.open('static/uploads/Violin.wav', 'rb')
+    p = pyaudio.PyAudio()
+    stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+                    channels=wf.getnchannels(),
+                    rate=wf.getframerate(),
+                    output=True)
+
+    data = wf.readframes(CHUNK)
+    while data != '':
+        stream.write(data)
+        data = wf.readframes(CHUNK)
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+    return 'Playing!'
 
 @app.route('/form-handler', methods=['POST'])
 def handle_data():
