@@ -139,7 +139,6 @@ def player():
     z = copy.deepcopy(y)
     limit = len(y)
 
-
     key = convKey(EDK)
     ind = genInd(key, limit)
     z = encDec(z, ind)
