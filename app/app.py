@@ -5,16 +5,18 @@ import librosa
 import soundfile as sf
 from soundfile import SoundFile
 
-SRCPATH = ''
+SRCPATH  = ''
 DESTPATH = ''
 TEMPPATH = ''
-EDK = ''
-TEMPEDK = ''
+EDK      = ''
+TEMPEDK  = ''
 
 app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
 
+#############################
+##### Utility functions #####
 def convKey(key):
     key = set(list(key))
     key = [ord(e) for e in key]
@@ -52,6 +54,48 @@ def encDec(data, ind):
         
     return data
 
+##################
+##### Routes #####
+
+@app.route('/form')
+def form():
+    return render_template('form.html')
+
+@app.route('/form_handler', methods=['POST'])
+def form_handler():
+    if request.method == "POST":
+        if request.files:
+            audioUpload = request.files["audioUpload"]
+            path = os.path.join('static/uploads/', audioUpload.filename)
+            audioUpload.save(path)
+
+            x,sr = librosa.load(path, sr=44100)
+            y = copy.deepcopy(x)
+            limit = len(x)
+
+            key = convKey(request.form["EDK"])
+            ind = genInd(key, limit)
+            y = encDec(y, ind)
+            
+            outPath = os.path.join('static/audio/', 'enc.wav')
+            librosa.output.write_wav(outPath, y, sr)
+            sf.write(outPath, y, sr, subtype='PCM_16')
+
+            global SRCPATH
+            global DESTPATH
+            global EDK
+
+            SRCPATH = path
+            DESTPATH = outPath
+            EDK = request.form["EDK"]
+
+    return redirect(url_for('playground'))
+
+@app.route('/playground')
+def playground():
+    print(SRCPATH, DESTPATH, EDK)
+    return render_template('playground.html', upload=SRCPATH, modified=DESTPATH, edk=EDK)
+
 @app.route('/recrypt', methods=['POST'])
 def recrypt():
     src = SRCPATH
@@ -79,46 +123,6 @@ def recrypt():
 @app.route('/playground2')
 def playground2():
     return render_template('playground.html', upload=SRCPATH, modified=TEMPPATH, edk=TEMPEDK)
-    
-
-@app.route('/playground')
-def playground():
-    print(SRCPATH, DESTPATH, EDK)
-    return render_template('playground.html', upload=SRCPATH, modified=DESTPATH, edk=EDK)
-
-@app.route('/form')
-def form():
-    return render_template('form.html')
-
-@app.route('/form_handler', methods=['POST'])
-def form_handler():
-    if request.method == "POST":
-        if request.files:
-            audioUpload = request.files["audioUpload"]
-            path = os.path.join('static/uploads/', audioUpload.filename)
-            audioUpload.save(path)
-            
-            x,sr = librosa.load(path, sr=44100)
-            y = copy.deepcopy(x)
-            limit = len(x)
-
-            key = convKey(request.form["EDK"])
-            ind = genInd(key, limit)
-            y = encDec(y, ind)
-            
-            outPath = os.path.join('static/audio/', 'test.wav')
-            librosa.output.write_wav(outPath, y, sr)
-            sf.write(outPath, y, sr, subtype='PCM_16')
-
-            global SRCPATH
-            global DESTPATH
-            global EDK
-
-            SRCPATH = path
-            DESTPATH = outPath
-            EDK = request.form["EDK"]
-
-    return redirect(url_for('playground'))
 
 @app.route('/library')
 def library():
