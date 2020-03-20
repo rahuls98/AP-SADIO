@@ -3,23 +3,85 @@
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style type="text/css">
+            h1  {
+                color: #c3c6c7;
+                padding-top: 20px;
+                text-align: center;
+                font-family:Georgia, 'Times New Roman', Times, serif
+            }
+            h3 {
+                color: #c3c6c7;
+                padding-top: none;
+                text-align: center;
+                font-family:'Courier New', Courier, monospace;
+            }
             body {
                 background-color: #0e153a;
+            }
+            .well {
+                margin-top: 20px;
+                background-color: #0e153a;
+                border: white solid 1px;
+            }
+            .btn {
+                background-color: #fc5185; 
+                color: white; 
+                font-size:20px;
             }
         </style>
     </head>
 
     <body>
         <div class="container-fluid">
-            <br>
-            <div class="well well-md" style="text-align: center;" >
-                <a href="/player">VIOLIN - Free Sounds</a>
+            <header>
+                <h1>e2e-SADIO</h1>
+            </header>
+            <div class="well well-md">
+                <div class="row">
+                    <h3 class="col-md-8">
+                        VIOLIN - Free Sounds
+                    </h3>
+                    <div class="col-md-4">
+                        <button type="button" onclick="location.href='player';" class="btn btn-default col-md-2">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </button>
+                        <a href="static/audio/test.wav" download="Violin.wav">
+                            <button type="button" class="btn btn-default col-md-2 col-md-offset-1">
+                                <span class="glyphicon glyphicon-download-alt"></span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="well well-md" style="text-align: center;" >
-                <a href="#">TEST1 - Demo Artist 1</a>
+            <div class="well well-md">
+                <div class="row">
+                    <h3 class="col-md-8">
+                        TEST1 - Demo Artist 1
+                    </h3>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-default col-md-2">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </button>
+                        <button type="button" class="btn btn-default col-md-2 col-md-offset-1">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="well well-md" style="text-align: center;" >
-                <a href="#">TEST2 - Demo Artist 2</a>
+            <div class="well well-md">
+                <div class="row">
+                    <h3 class="col-md-8">
+                        TEST2 - Demo Artist 2
+                    </h3>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-default col-md-2">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </button>
+                        <button type="button" class="btn btn-default col-md-2 col-md-offset-1">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

@@ -6,6 +6,9 @@
             * {
                 font-family:'Courier New', Courier, monospace;
             }
+            body {
+                background-color: #0e153a;
+            }
             h1  {
                 color: #c3c6c7;
                 padding-top: 20px;
@@ -13,7 +16,6 @@
                 font-family:Georgia, 'Times New Roman', Times, serif
             }
             h3 {
-                color: #c3c6c7;
                 font-weight: bold;
                 font-size: 1.875em;
                 font-family:Georgia, 'Times New Roman', Times, serif
@@ -22,13 +24,14 @@
                 font-size: 1.2em;
                 color: #c3c6c7;
             }
-            body {
-                background-color: #0e153a;
-            }
-            .form-group {
+            .card {
                 margin-top: 20px;
-                border: white solid 1px; 
-                border-radius: 10px;
+                padding-bottom: 10px;
+                border: white solid 1px;
+                border-radius: 10px; 
+            }
+            input {
+                margin-bottom: 10px;
             }
         </style>
     </head>
@@ -38,44 +41,43 @@
             <header>
                 <h1>e2e-SADIO</h1>
             </header>
-            <form method="POST" action="/form_handler" enctype="multipart/form-data">
-                <div class="form-group col-md-4 col-md-offset-4">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>UPLOAD</h3>
-                            <p>Upload the audio file to be encoded/decoded. <br/>
-                               [Currently supports files of .wav type]</p>
+            <div class="card col-md-6 col-md-offset-3">
+                <div style="text-align:center;">
+                    <h3 style="color: #e2f3f5">ORIGINAL CLIP</h3>
+                </div>
+                <div style="text-align:center;">
+                    <audio controls src="{{ upload }}" preload="auto"></audio>
+                </div>
+            </div>
+
+            <div class="card col-md-6 col-md-offset-3" style="border: none;">
+                <br>
+                <form method="POST" action="/recrypt">
+                    <div class="form-group">
+                        <div class="col-md-12" style="text-align:center;">
+                                <p>Currently crypted with {{ edk }} <br>
+                                    Try another key.</p>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <input type="file" class="form-control" name="audioUpload" placeholder="Username" style="font-size: 1.2em;">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>KEY</h3>
-                            <p>Enter the key for the crypting process. <br/>
-                                This key is common for encoding and decoding.</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="text-align:center;">
                             <input type="text" class="form-control" name="EDK" placeholder="Enter key"  style="font-size: 1.2em;">  
                         </div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="text-align:center;">
                             <button class="btn btn-default" type="submit" style="background-color:#fc5185; font-size: 1.2em; color:white ">Encrypt/Decrypt</button>
                         </div>
                     </div>
-                    <br>
+                </form>
+            </div>
+
+            <div class="card col-md-6 col-md-offset-3">
+                <div style="text-align:center;">
+                    <h3 style="color: #e2f3f5">MODIFIED CLIP</h3>
                 </div>
-            </form>
+                <div style="text-align:center;">
+                    <audio controls src="{{ modified }}" preload="auto"></audio>
+                </div>
+            </div>
         </div>
+        
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </body>
 </html>

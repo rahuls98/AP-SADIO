@@ -5,6 +5,12 @@ import librosa
 import soundfile as sf
 from soundfile import SoundFile
 
+SRCPATH = ''
+DESTPATH = ''
+TEMPPATH = ''
+EDK = ''
+TEMPEDK = ''
+
 app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
@@ -46,12 +52,39 @@ def encDec(data, ind):
         
     return data
 
-@app.route('/home')
-def home():
-    upload = 'static/uploads/Violin.wav'
-    modified = 'static/audio/test.wav'
-    edk = 'test'
-    return render_template('home.html', upload=upload, modified=modified, edk=edk)
+@app.route('/recrypt', methods=['POST'])
+def recrypt():
+    src = SRCPATH
+    
+    x,sr = librosa.load(src, sr=44100)
+    y = copy.deepcopy(x)
+    limit = len(x)
+
+    key = convKey(request.form["EDK"])
+    ind = genInd(key, limit)
+    y = encDec(y, ind)
+
+    outPath = os.path.join('static/temp/', 'temp.wav')
+    librosa.output.write_wav(outPath, y, sr)
+    sf.write(outPath, y, sr, subtype='PCM_16')
+
+    global TEMPPATH
+    global TEMPEDK
+    TEMPPATH = outPath
+    TEMPEDK = request.form["EDK"]
+
+    print(EDK, TEMPEDK)
+    return redirect(url_for('playground2'))
+
+@app.route('/playground2')
+def playground2():
+    return render_template('playground.html', upload=SRCPATH, modified=TEMPPATH, edk=TEMPEDK)
+    
+
+@app.route('/playground')
+def playground():
+    print(SRCPATH, DESTPATH, EDK)
+    return render_template('playground.html', upload=SRCPATH, modified=DESTPATH, edk=EDK)
 
 @app.route('/form')
 def form():
@@ -77,19 +110,33 @@ def form_handler():
             librosa.output.write_wav(outPath, y, sr)
             sf.write(outPath, y, sr, subtype='PCM_16')
 
-    return redirect(url_for('home'))
+            global SRCPATH
+            global DESTPATH
+            global EDK
 
-@app.route('/demoLib')
-def demoLib():
+            SRCPATH = path
+            DESTPATH = outPath
+            EDK = request.form["EDK"]
+
+    return redirect(url_for('playground'))
+
+@app.route('/library')
+def library():
     return render_template('library.html')
 
 @app.route('/player')
 def player():
-    y,sr = librosa.load('static/audio/test.wav', sr=44100)
+    global DESTPATH
+    global EDK
+
+    print(DESTPATH, EDK)
+
+    y,sr = librosa.load(DESTPATH, sr=44100)
     z = copy.deepcopy(y)
     limit = len(y)
 
-    key = convKey('elephant')
+
+    key = convKey(EDK)
     ind = genInd(key, limit)
     z = encDec(z, ind)
     tb = z.tobytes()
@@ -116,7 +163,7 @@ def player():
     wf.close()
     print('Done')
     os.remove("static/temp/temp.txt")
-    return redirect(url_for('demoLib'))
+    return redirect(url_for('library'))
 
 if __name__ == '__main__':
     app.run(debug=True)
