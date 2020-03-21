@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os, random, copy, socket
-import pyaudio, wave, sys
+import pyaudio, wave, sys, time
 import librosa
 import soundfile as sf
 from soundfile import SoundFile
@@ -167,6 +167,45 @@ def player():
     print('Done')
     os.remove("static/temp/temp.txt")
     return redirect(url_for('library'))
+
+@app.route('/client')
+def client():
+    return render_template('audioButton.html')
+
+@app.route('/beginStream', methods=['POST'])
+def beginStream():
+    return redirect(url_for('streamingClient'))
+
+@app.route('/streamingClient')
+def streamingClient():
+    CHUNK = 1024
+    p = pyaudio.PyAudio()
+
+    stream = p.open(format=1,
+                    channels=1,
+                    rate=44100,
+                    output=True)
+
+    s = socket.socket()
+    host = socket.gethostbyname('localhost')
+    port = 50001
+    s.connect((host, port))
+    print("\nReceiving data")
+
+    while True:
+        data = s.recv(1024)
+        if not data:
+            break
+        stream.write(data)
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+    print("\nData streaming complete!")
+    s.close()
+    print("Connection closed")
+
+    return redirect(url_for('client'))
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -42,9 +42,11 @@ def encDec(data, ind):
     return data
 
 x,sr = librosa.load('./fileStorage/enc.wav', sr=44100)
+print("Encoded file loaded!")
 y = copy.deepcopy(x)
 limit = len(x)
 key = 'aez16'
+print("Operation key obtained")
 key = convKey(key)
 ind = genInd(key, limit)
 y = encDec(y, ind)
@@ -53,6 +55,7 @@ tb = y.tobytes()
 with open('./temp/temp.txt', 'wb') as f:
     f.write(tb)
 
+print("Decoded bytes ready for transfer!")
 port = 50001
 s = socket.socket()
 host = socket.gethostbyname('localhost')
@@ -71,7 +74,7 @@ while True:
     break
 
 f.close()
-print("\nData sent!")
+print("\nData transfer complete!")
 conn.close()
 s.close()
 os.remove('./temp/temp.txt')
