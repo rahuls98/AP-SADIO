@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
-import os, random, copy, socket
-import pyaudio, wave, sys, time
+import os copy, socket
+import pyaudio
 import librosa
 import soundfile as sf
 from soundfile import SoundFile
@@ -78,7 +78,6 @@ def form_handler():
             y = encDec(y, ind)
             
             outPath = os.path.join('static/audio/', 'enc.wav')
-            librosa.output.write_wav(outPath, y, sr)
             sf.write(outPath, y, sr, subtype='PCM_16')
 
             global SRCPATH
@@ -109,7 +108,6 @@ def recrypt():
     y = encDec(y, ind)
 
     outPath = os.path.join('static/temp/', 'temp.wav')
-    librosa.output.write_wav(outPath, y, sr)
     sf.write(outPath, y, sr, subtype='PCM_16')
 
     global TEMPPATH
