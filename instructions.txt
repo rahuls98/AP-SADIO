@@ -1,0 +1,31 @@
+- Python3 is required to run the project since all the libraries and code are Python3 based.
+
+- Unzip the source code folder and navigate to the application folder as follows : 
+** AP-SADIO > application/ **
+
+- All requirements are to be satisfied using the pip installer before running the python-flask project.
+
+- Using venv (Python3), create a “virtual” isolated Python installation and install packages into that virtual installation using: 
+** pip install -r requirements.txt **
+
+- With all these steps performed, the app should be ready to run. 
+To run the app, enter the command : 
+** python app.py **
+
+- The app will now be accessible on ** localhost:9889 **. If port number 9889 is not free, a suitable port number can be selected in the main method of app.py
+
+- Click on the 'Begin Demo' button on the landing page to get redirected to the upload form. Here an audio file of you choice can be uploaded for experiencing the encoding/decoding process. This file has to be of the .wav format as of now. For convenience, a sample audio file has been provided in the source code folder: 
+** AP-SADIO > application > Violin.wav **
+
+- Please upload the audio file and choose a suitable key. I suggest the use of ** 'aez16' ** as the key for this audio clip to see a good amount of modification in the original upload [Violin.wav]. This file and the corresponding key will be used for all other examples.
+
+- After completion of the previous step hit the 'Encode/Decode' button to be redirected to the playground page. Here you can experience the modifications made in the original clip as a result of being encoded using the key. You can also use different keys to check for different encodings possible. After this hit the 'Go to library' button to be redirected to the library page.
+
+- Here an online media player is simulated, offering the option to play a track. It also emulates a vulnerability exploiting which users can directly download songs from the source file system. But the source of these options is the encoded version of the Violin.wav clip used earlier. On hitting the play button it is noticed that the proper decoded version is being played, but the download gives the encoded version, even thought the source of these 2 operations are the same file. This basically shows how encoded version being stored in storage, is being decoded live and provided as the original content.
+
+- On clicking the 'Go to client' button, user is redirected to the client page to experience the application of this concept using a media streaming like platform. For this functionality, the contentServer.py script needs to be located and run on a separate terminal. It is present in the following location: 
+** AP-SADIO > content_server/ **
+Run the script using: 
+** python contentServer.py **
+
+- Once this mock server is running, go to the client page on the website and hit the play button. Content will begin streaming. Notice that the content_server folder also has a mock_file_storage folder, which emulates the file storage system of the host serving the content to the client. Also notice that the encoded file is what is stored in the storage. This is used to demonstrate the second part of my solution, which is the plug and play solution for live decoding of the encoded clips at the server socket.
