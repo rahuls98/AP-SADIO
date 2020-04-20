@@ -3,5 +3,5 @@ This repo contains a possible solution for secure audio encoding and storage, wi
 Demo: https://www.youtube.com/watch?v=3xDBFLnZgss
 
 
-![Home](https://github.com/rahuls98/e2e-SADIO/images/Home.png)
-![Playground](https://github.com/rahuls98/e2e-SADIO/images/Playground.png)
+![Home](images/Home.png)
+![Playground](images/Playground.png)
