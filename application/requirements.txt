@@ -2,7 +2,7 @@ audioread==2.1.8
 cffi==1.14.0
 click==7.1.1
 decorator==4.4.2
-Flask==1.1.1
+Flask==2.3.2
 itsdangerous==1.1.0
 Jinja2==2.11.3
 joblib==1.2.0
